@@ -8,6 +8,8 @@ const block = {
 	height: 32,
 	velocityY: 0,
 	gravity: 0.5,
+	velocityX: 0,
+	speed: 2,
 };
 
 function update() {
@@ -22,20 +24,17 @@ function update() {
 		block.y = canvas.height - block.height;
 		block.velocityY = 0;
 	}
-}
 
-function draw() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-	// Draw the block
-	ctx.fillStyle = 'blue';
-	ctx.fillRect(block.x, block.y, block.width, block.height);
-}
-
-function loop() {
-	update();
-	draw();
-	requestAnimationFrame(loop);
-}
-
-loop();
+	// Check for controller input
+	if (navigator.getGamepads()[0]) {
+		const gamepad = navigator.getGamepads()[0];
+		if (gamepad.buttons[0].pressed) {
+			// Move left
+			block.velocityX = -block.speed;
+		} else if (gamepad.buttons[1].pressed) {
+			// Move right
+			block.velocityX = block.speed;
+		} else {
+			// Stop moving
+			block.velocityX = 0;
+		}
