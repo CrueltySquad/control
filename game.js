@@ -1,40 +1,28 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+const block = document.getElementById('block');
+const blockWidth = parseInt(window.getComputedStyle(block).width);
+const blockHeight = parseInt(window.getComputedStyle(block).height);
+const screenWidth = window.innerWidth;
+const screenHeight = window.innerHeight;
 
-const block = {
-	x: 50,
-	y: 50,
-	width: 32,
-	height: 32,
-	velocityY: 0,
-	gravity: 0.5,
-	velocityX: 0,
-	speed: 2,
-};
+let blockX = screenWidth / 2 - blockWidth / 2;
+let blockY = screenHeight - blockHeight - 20;
 
-function update() {
-	// Apply gravity
-	block.velocityY += block.gravity;
+function updateBlockPosition() {
+    block.style.left = blockX + 'px';
+    block.style.top = blockY + 'px';
+}
 
-	// Update block position
-	block.y += block.velocityY;
+const horizontalInput = document.getElementById('horizontal');
+const verticalInput = document.getElementById('vertical');
 
-	// Check for collisions with the ground
-	if (block.y + block.height > canvas.height) {
-		block.y = canvas.height - block.height;
-		block.velocityY = 0;
-	}
+horizontalInput.addEventListener('input', () => {
+    blockX += parseInt(horizontalInput.value);
+    updateBlockPosition();
+});
 
-	// Check for controller input
-	if (navigator.getGamepads()[0]) {
-		const gamepad = navigator.getGamepads()[0];
-		if (gamepad.buttons[0].pressed) {
-			// Move left
-			block.velocityX = -block.speed;
-		} else if (gamepad.buttons[1].pressed) {
-			// Move right
-			block.velocityX = block.speed;
-		} else {
-			// Stop moving
-			block.velocityX = 0;
-		}
+verticalInput.addEventListener('input', () => {
+    blockY += parseInt(verticalInput.value);
+    updateBlockPosition();
+});
+
+updateBlockPosition();
