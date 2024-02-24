@@ -1,32 +1,36 @@
-const element = (id) => {
-    return document.getElementById(id);
+// Get references to chatbox and user input elements
+const chatbox = document.getElementById('chatbox');
+const userInput = document.getElementById('userInput');
+
+// Function to generate a chatbot response
+function generateResponse(userMessage) {
+	// Add some basic chatbot logic here
+	const response = `Chatbot: ${userMessage.toUpperCase()}`;
+	return response;
 }
 
-let allSearchData = "";
+// Function to handle user message submission
+function handleUserMessage() {
+	// Get user message from input
+	const userMessage = userInput.value.trim();
 
-const getResults = () => {
-    const search = element("search-input").value;
-    allSearchData = "";
-    hideSearchResults();
-    clearSearchResults();
-    clearSearchData();
+	// Generate a response
+	const response = generateResponse(userMessage);
 
-    if (search.length > 1) {
-        for (let x of names) {
-            if (x.toLowerCase().includes(search.toLowerCase())) {
-                element("search-results").innerHTML += `<div class='search-item' onclick='displayData("${x}")'><p>${x}</p></div>`;
-            }
+	// Display the response in the chatbox
+	chatbox.innerHTML += `<p>${response}</p>`;
 
-            if (x.toLowerCase().includes(search.toLowerCase())) {
-                allSearchData += `<p>${x}</p>`;
-            }
-        }
-
-        displaySearchResults();
-    }
-
-    displaySearchData();
+	// Clear user input
+	userInput.value = '';
 }
 
-const displaySearchResults = () => {
-   
+// Add event listener to send button
+const sendButton = document.getElementById('sendButton');
+sendButton.addEventListener('click', handleUserMessage);
+
+// Add event listener to user input for Enter key press
+userInput.addEventListener('keydown', (event) => {
+	if (event.key === 'Enter') {
+		handleUserMessage();
+	}
+});
